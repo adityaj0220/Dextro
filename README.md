@@ -1,8 +1,4 @@
-# app
+# moOjix 
 
-A new Flutter application.
-
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+A music player made using Flutter. 
+It's extremely basic & buggy.  
