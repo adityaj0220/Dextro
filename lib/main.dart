@@ -14,6 +14,7 @@ class MyApp extends StatefulWidget {
 class Homepage extends State<MyApp> {
   MusicFinder audioPlayer;
   List<Song> demsongs;
+  var isPlaying=false;
 
   @override
   void initState() {
@@ -23,6 +24,12 @@ class Homepage extends State<MyApp> {
 
   Future play(String url) async {
     final result = await audioPlayer.play(url, isLocal: true);
+    isPlaying=true;
+  }
+
+  pause() async {
+    final result = await audioPlayer.pause();
+    isPlaying=false;
   }
 
   void _getsongspls() async {
@@ -36,7 +43,7 @@ class Homepage extends State<MyApp> {
     Widget home() {
       return new Scaffold(
         appBar: new AppBar(
-          title: new Text("moOjix"),
+          title: new Text("Dextro"),
         ), //AppBar
         body: new ListView.builder(
           itemCount: (demsongs == null) ? 0 : demsongs.length,
@@ -47,12 +54,23 @@ class Homepage extends State<MyApp> {
                 ), //CircleAvatar
                 title: new Text(demsongs[index].title),
                 onTap: () {
-                  play(demsongs[index].uri);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MusicLayout()),
-                  ); //Navigator
-                }
+                      if(isPlaying==false)
+                      {
+                        play(demsongs[index].uri);
+                      }
+                      else
+                        if(isPlaying==true)
+                        {
+                          pause();
+                          if(isPlaying==false)
+                            play(demsongs[index].uri);
+                        }
+                      /*Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MusicLayout()),
+                    ); //Navigator
+                */
+                }//OnTap
             ); //ListTile
           },
         ), //ListView.Builder
@@ -110,18 +128,12 @@ class _MusicLayoutState extends State<MusicLayout> {
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage('assets/butmun.jpg')
-                          )
-                      )
-                  ),
+                          )//DecorationImage
+                      )//BoxDecoration
+                  ),//DecoratedBox
               ), //Container
             ), //Center
           ), //Expanded
-
-          //Visualizer
-          new Container(
-            width: double.infinity,
-            height: 125.0,
-          ),
 
           //Song details
           new Container(
@@ -195,18 +207,18 @@ class _MusicLayoutState extends State<MusicLayout> {
                               size: 35.0,
                             ), //Icon
                             onPressed: (){
-
+                                //TODO
                             }), //IconButton
                         new Expanded(child: new Container()),
                       ], //<Widget>
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
+                    ),//Row
+                  )//Padding
+                ],//<Widget>
+              ),//Column
+            ),//Padding
+          )//Container
+        ],//<Widget>
+      ),//Column
     ); //Scaffold
   }
 }
