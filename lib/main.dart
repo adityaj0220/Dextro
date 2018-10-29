@@ -14,25 +14,29 @@ class MyApp extends StatefulWidget {
 class Homepage extends State<MyApp> {
   MusicFinder audioPlayer;
   List<Song> demsongs;
-  var isPlaying=false;
+  var isPlaying = false;
 
   @override
   void initState() {
     super.initState();
-    _getsongspls();
+    getsongspls();
   }
 
   Future play(String url) async {
-    final result = await audioPlayer.play(url, isLocal: true);
-    isPlaying=true;
+    audioPlayer.play(url, isLocal: true);
+    isPlaying = true;
   }
 
   pause() async {
-    final result = await audioPlayer.pause();
-    isPlaying=false;
+    audioPlayer.pause();
+    isPlaying = false;
   }
 
-  void _getsongspls() async {
+  stop() async {
+    audioPlayer.stop();
+  }
+
+  void getsongspls() async {
     audioPlayer = new MusicFinder();
     demsongs = await MusicFinder.allSongs();
     setState(() {});
@@ -43,6 +47,7 @@ class Homepage extends State<MyApp> {
     Widget home() {
       return new Scaffold(
         appBar: new AppBar(
+          backgroundColor: Colors.indigoAccent,
           title: new Text("Dextro"),
         ), //AppBar
         body: new ListView.builder(
@@ -50,39 +55,64 @@ class Homepage extends State<MyApp> {
           itemBuilder: (context, int index) {
             return new ListTile(
                 leading: new CircleAvatar(
-                  backgroundColor: darkAccentColorpt2,
+                  backgroundColor: Colors.teal,
+                  child: new Text(demsongs[index].title[0].toUpperCase(),
+                    style: TextStyle(color: Colors.black87,
+                      fontWeight: FontWeight.bold
+                    ),//TextStyle
+                  ),//Text
                 ), //CircleAvatar
                 title: new Text(demsongs[index].title),
                 onTap: () {
-                      if(isPlaying==false)
-                      {
-                        play(demsongs[index].uri);
-                      }
-                      else
-                        if(isPlaying==true)
-                        {
-                          pause();
-                          if(isPlaying==false)
-                            play(demsongs[index].uri);
-                        }
-                      /*Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MusicLayout()),
-                    ); //Navigator
-                */
-                }//OnTap
+                  if (isPlaying == false) {
+                    play(demsongs[index].uri);
+                  }
+                  else if (isPlaying == true) {
+                    stop();
+                    play(demsongs[index].uri);
+                  }
+                } //OnTap
             ); //ListTile
-          },
+          }, //ItemBuilder
         ), //ListView.Builder
-      );
+        bottomNavigationBar: new BottomAppBar(
+            color: Colors.indigoAccent,
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                new IconButton(icon: new Icon(Icons.keyboard_arrow_up),
+                    color: Colors.white,
+                    onPressed: () {
+                      try{
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MusicLayout()),
+                      ); //Navigator
+                    }catch(e) {e.printStackTrace();}
+                  }//OnPressed
+                ), //IconButton
+                new IconButton(icon: new Icon(Icons.pause),
+                    color: Colors.white,
+                  onPressed: () {
+                    if (isPlaying == true) {
+                      pause();
+                    }
+                  },
+                ) //IconButton
+              ], //<Widget>
+           ) //Row
+        ), //BottomAppBar
+      ); //Scaffold
     }
     return new MaterialApp(
       home: home(),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: true,
+      theme: new ThemeData.dark()
     );
   }
 }
+
 
 class MusicLayout extends StatefulWidget {
   @override
@@ -119,18 +149,18 @@ class _MusicLayoutState extends State<MusicLayout> {
       body: new Column(
         children: <Widget>[
           //Seek bar
-          new Expanded(               //Album Art
+          new Expanded( //Album Art
             child: new Center(
               child: new Container(
                 width: 125.0,
                 height: 125.0,
-                  child: new DecoratedBox(
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage('assets/butmun.jpg')
-                          )//DecorationImage
-                      )//BoxDecoration
-                  ),//DecoratedBox
+                child: new DecoratedBox(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/butmun.jpg')
+                        ) //DecorationImage
+                    ) //BoxDecoration
+                ), //DecoratedBox
               ), //Container
             ), //Center
           ), //Expanded
@@ -206,19 +236,19 @@ class _MusicLayoutState extends State<MusicLayout> {
                               color: Colors.white,
                               size: 35.0,
                             ), //Icon
-                            onPressed: (){
-                                //TODO
+                            onPressed: () {
+                              //TODO
                             }), //IconButton
                         new Expanded(child: new Container()),
                       ], //<Widget>
-                    ),//Row
-                  )//Padding
-                ],//<Widget>
-              ),//Column
-            ),//Padding
-          )//Container
-        ],//<Widget>
-      ),//Column
+                    ), //Row
+                  ) //Padding
+                ], //<Widget>
+              ), //Column
+            ), //Padding
+          ) //Container
+        ], //<Widget>
+      ), //Column
     ); //Scaffold
   }
 }
