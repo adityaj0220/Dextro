@@ -1,17 +1,44 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:app/theme.dart';
+import 'theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flute_music_player/flute_music_player.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  Homepage createState() => new Homepage();
+  Widget build(BuildContext context) {
+    return new DextroAppWrapper();
+  }
 }
 
-class Homepage extends State<MyApp> {
+class DextroAppWrapper extends StatefulWidget {
+  @override
+  _DextroAppWrapperState createState() => new _DextroAppWrapperState();
+}
+
+class _DextroAppWrapperState extends State<DextroAppWrapper> {
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+        home: new DextroApp(),
+        debugShowCheckedModeBanner: true,
+        theme: new ThemeData.dark(),
+        routes: <String, WidgetBuilder>{
+          '/MusicLayout': (BuildContext context) => new MusicLayout(),
+        }
+    );
+  }
+}
+
+
+class DextroApp extends StatefulWidget {
+  @override
+  _DextroState createState() => new _DextroState();
+}
+
+class _DextroState extends State<DextroApp> {
   MusicFinder audioPlayer;
   List<Song> demsongs;
   var isPlaying = false;
@@ -44,72 +71,64 @@ class Homepage extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    Widget home() {
-      return new Scaffold(
-        appBar: new AppBar(
-          backgroundColor: Colors.indigoAccent,
-          title: new Text("Dextro"),
-        ), //AppBar
-        body: new ListView.builder(
-          itemCount: (demsongs == null) ? 0 : demsongs.length,
-          itemBuilder: (context, int index) {
-            return new ListTile(
-                leading: new CircleAvatar(
-                  backgroundColor: Colors.teal,
-                  child: new Text(demsongs[index].title[0].toUpperCase(),
-                    style: TextStyle(color: Colors.black87,
+    return new Scaffold(
+      appBar: new AppBar(
+        backgroundColor: Colors.indigoAccent,
+        title: new Text("Dextro"),
+      ), //AppBar
+      body: new ListView.builder(
+        itemCount: (demsongs == null) ? 0 : demsongs.length,
+        itemBuilder: (context, int index) {
+          return new ListTile(
+              leading: new CircleAvatar(
+                backgroundColor: Colors.teal,
+                child: new Text(demsongs[index].title[0].toUpperCase(),
+                  style: TextStyle(color: Colors.black87,
                       fontWeight: FontWeight.bold
-                    ),//TextStyle
-                  ),//Text
-                ), //CircleAvatar
-                title: new Text(demsongs[index].title),
-                onTap: () {
-                  if (isPlaying == false) {
-                    play(demsongs[index].uri);
-                  }
-                  else if (isPlaying == true) {
-                    stop();
-                    play(demsongs[index].uri);
-                  }
-                } //OnTap
-            ); //ListTile
-          }, //ItemBuilder
-        ), //ListView.Builder
-        bottomNavigationBar: new BottomAppBar(
-            color: Colors.indigoAccent,
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                new IconButton(icon: new Icon(Icons.keyboard_arrow_up),
-                    color: Colors.white,
-                    onPressed: () {
-                      try{
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MusicLayout()),
-                      ); //Navigator
-                    }catch(e) {e.printStackTrace();}
-                  }//OnPressed
-                ), //IconButton
-                new IconButton(icon: new Icon(Icons.pause),
-                    color: Colors.white,
+                  ), //TextStyle
+                ), //Text
+              ), //CircleAvatar
+              title: new Text(demsongs[index].title),
+              onTap: () {
+                if (isPlaying == false) {
+                  play(demsongs[index].uri);
+                }
+                else if (isPlaying == true) {
+                  stop();
+                  play(demsongs[index].uri);
+                }
+              } //OnTap
+          ); //ListTile
+        }, //ItemBuilder
+      ), //ListView.Builder
+      bottomNavigationBar: new BottomAppBar(
+          color: Colors.indigoAccent,
+          child: new Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              new IconButton(icon: new Icon(Icons.keyboard_arrow_up),
+                  color: Colors.white,
                   onPressed: () {
-                    if (isPlaying == true) {
-                      pause();
+                    try {
+                      Navigator.of(context).pushNamed('/MusicLayout');
+                    } catch (e) {
+                      print(e.toString());
                     }
-                  },
-                ) //IconButton
-              ], //<Widget>
-           ) //Row
-        ), //BottomAppBar
-      ); //Scaffold
-    }
-    return new MaterialApp(
-      home: home(),
-      debugShowCheckedModeBanner: true,
-      theme: new ThemeData.dark()
-    );
+                  } //OnPressed
+              ), //IconButton
+              new IconButton(icon: new Icon(Icons.pause),
+                color: Colors.white,
+                onPressed: () {
+                  if (isPlaying == true) {
+                    pause();
+                  }
+                },
+              ) //IconButton
+            ], //<Widget>
+          ) //Row
+      ), //BottomAppBar
+    ); //Scaffold,
   }
 }
 
@@ -167,7 +186,7 @@ class _MusicLayoutState extends State<MusicLayout> {
 
           //Song details
           new Container(
-            color: darkAccentColorpt2,
+            color: Colors.indigoAccent,
             child: Padding(
               padding: const EdgeInsets.only(top: 40.0, bottom: 50.0),
               child: new Column(
@@ -215,8 +234,8 @@ class _MusicLayoutState extends State<MusicLayout> {
                         new RawMaterialButton(
                           shape: new CircleBorder(),
                           fillColor: Colors.white,
-                          splashColor: darkAccentColorpt2,
-                          highlightColor: darkAccentColorpt2.withOpacity(0.5),
+                          splashColor: Colors.indigoAccent,
+                          highlightColor: Colors.indigoAccent.withOpacity(0.5),
                           elevation: 10.0,
                           highlightElevation: 5.0,
                           onPressed: null,
@@ -224,7 +243,7 @@ class _MusicLayoutState extends State<MusicLayout> {
                               padding: const EdgeInsets.all(8.0),
                               child: new Icon(
                                 Icons.play_arrow,
-                                color: darkAccentColorpt2,
+                                color: Colors.indigoAccent,
                                 size: 35.0,
                               ) //Icon
                           ), //Padding
@@ -252,3 +271,4 @@ class _MusicLayoutState extends State<MusicLayout> {
     ); //Scaffold
   }
 }
+
