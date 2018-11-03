@@ -11,6 +11,8 @@ class _DextroState extends State<DextroApp> {
   MusicFinder audioPlayer;
   List<Song> demsongs;
   var isPlaying = false;
+  var indexbackup;
+  var isPaused=false;
 
   @override
   void initState() {
@@ -26,6 +28,7 @@ class _DextroState extends State<DextroApp> {
   pause() async {
     audioPlayer.pause();
     isPlaying = false;
+    isPaused=true;
   }
 
   stop() async {
@@ -37,6 +40,7 @@ class _DextroState extends State<DextroApp> {
     demsongs = await MusicFinder.allSongs();
     setState(() {});
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +55,7 @@ class _DextroState extends State<DextroApp> {
           return new ListTile(
               leading: new CircleAvatar(
                 backgroundColor: Colors.teal,
+                //child: new Image.asset(demsongs[index].album)
                 child: new Text(demsongs[index].title[0].toUpperCase(),
                   style: TextStyle(color: Colors.black87,
                       fontWeight: FontWeight.bold
@@ -59,13 +64,18 @@ class _DextroState extends State<DextroApp> {
               ), //CircleAvatar
               title: new Text(demsongs[index].title),
               onTap: () {
-                if (isPlaying == false) {
+                if (!isPlaying) {
                   play(demsongs[index].uri);
+                  indexbackup = index;
+                  setState(() {});
                 }
-                else if (isPlaying == true) {
-                  stop();
-                  play(demsongs[index].uri);
-                }
+                else
+                  {
+                    stop();
+                    play(demsongs[index].uri);
+                    indexbackup = index;
+                    setState(() {});
+                  }
               } //OnTap
           ); //ListTile
         }, //ItemBuilder
@@ -86,12 +96,17 @@ class _DextroState extends State<DextroApp> {
                     }
                   } //OnPressed
               ), //IconButton
-              new IconButton(icon: new Icon(Icons.pause),
+              new IconButton(icon: (isPlaying)?Icon(Icons.pause):Icon(Icons.play_arrow),
                 color: Colors.white,
                 onPressed: () {
-                  if (isPlaying == true) {
+                  if (isPlaying) {
                     pause();
+                    setState(() {});
                   }
+                  else if(!isPlaying)
+                    { play(demsongs[indexbackup].uri);
+                      setState(() {});
+                    }
                 },
               ) //IconButton
             ], //<Widget>
