@@ -65,6 +65,13 @@ class _DextroState extends State<DextroApp> {
               title: new Text(demsongs[index].title),
               onTap: () {
                 if (!isPlaying) {
+                  if(isPaused)
+                    {
+                      stop();
+                      play(demsongs[index].uri);
+                      indexbackup = index;
+                      setState(() {});
+                    }
                   play(demsongs[index].uri);
                   indexbackup = index;
                   setState(() {});
@@ -81,7 +88,7 @@ class _DextroState extends State<DextroApp> {
         }, //ItemBuilder
       ), //ListView.Builder
       bottomNavigationBar: new BottomAppBar(
-          color: Colors.indigoAccent,
+          color: Colors.black87,
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
@@ -112,7 +119,7 @@ class _DextroState extends State<DextroApp> {
             ], //<Widget>
           ) //Row
       ), //BottomAppBar
-    ); //Scaffold,
+    ); //Scaffold
   }
 }
 
