@@ -1,6 +1,8 @@
-import 'package:flute_music_player/flute_music_player.dart';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flute_music_player/flute_music_player.dart';
 
 class DextroApp extends StatefulWidget {
   @override
@@ -46,40 +48,43 @@ class _DextroState extends State<DextroApp> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        backgroundColor: Colors.indigoAccent,
+        backgroundColor: Colors.blue,
         title: new Text("Dextro"),
       ), //AppBar
       body: new ListView.builder(
         itemCount: (demsongs == null) ? 0 : demsongs.length,
         itemBuilder: (context, int index) {
+          var s = demsongs[index];
+          var art = (s.albumArt == null) ? null : new File.fromUri(Uri.parse(s.albumArt));
           return new ListTile(
               leading: new CircleAvatar(
-                backgroundColor: Colors.teal,
-                //child: new Image.asset(demsongs[index].album)
-                child: new Text(demsongs[index].title[0].toUpperCase(),
-                  style: TextStyle(color: Colors.black87,
-                      fontWeight: FontWeight.bold
-                  ), //TextStyle
-                ), //Text
-              ), //CircleAvatar
-              title: new Text(demsongs[index].title),
+                  backgroundColor: Colors.transparent,
+                  child: (art!=null) ? new Image.file(art,
+                  fit: BoxFit.cover
+                ): new Icon(
+                    Icons.music_note,
+                    color: Colors.white
+                  )
+              ),
+              title: new Text(s.title),
+              subtitle: new Text(s.artist),
               onTap: () {
                 if (!isPlaying) {
                   if(isPaused)
                     {
                       stop();
-                      play(demsongs[index].uri);
+                      play(s.uri);
                       indexbackup = index;
                       setState(() {});
                     }
-                  play(demsongs[index].uri);
+                  play(s.uri);
                   indexbackup = index;
                   setState(() {});
                 }
                 else
                   {
                     stop();
-                    play(demsongs[index].uri);
+                    play(s.uri);
                     indexbackup = index;
                     setState(() {});
                   }
@@ -88,7 +93,7 @@ class _DextroState extends State<DextroApp> {
         }, //ItemBuilder
       ), //ListView.Builder
       bottomNavigationBar: new BottomAppBar(
-          color: Colors.black87,
+          color: Colors.black,
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
@@ -121,5 +126,6 @@ class _DextroState extends State<DextroApp> {
       ), //BottomAppBar
     ); //Scaffold
   }
+
 }
 

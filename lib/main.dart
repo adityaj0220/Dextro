@@ -23,7 +23,7 @@ class _DextroAppWrapperState extends State<DextroAppWrapper> {
     return new MaterialApp(
         home: new DextroApp(),
         debugShowCheckedModeBanner: true,
-        theme: new ThemeData.dark(),
+        theme: ThemeData.dark(),
         routes: <String, WidgetBuilder>{
           '/MusicLayout': (BuildContext context) => new MusicLayout(),
         }

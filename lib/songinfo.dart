@@ -102,7 +102,7 @@ class _MusicLayoutState extends State<MusicLayout> {
                           onPressed: null,
                           child: new Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: new Icon(Icons.play_arrow)
+                              child: new Icon(Icons.pause)
                           ), //Padding
                         ), //RawMaterialButton
                         new Expanded(child: new Container()),
