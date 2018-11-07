@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flute_music_player/flute_music_player.dart';
@@ -54,37 +53,35 @@ class _DextroState extends State<DextroApp> {
       body: new ListView.builder(
         itemCount: (demsongs == null) ? 0 : demsongs.length,
         itemBuilder: (context, int index) {
-          var s = demsongs[index];
-          var art = (s.albumArt == null) ? null : new File.fromUri(Uri.parse(s.albumArt));
+          var song = demsongs[index];
+          var art = (song.albumArt == null) ? null : new File.fromUri(Uri.parse(song.albumArt));
           return new ListTile(
               leading: new CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: (art!=null) ? new Image.file(art,
-                  fit: BoxFit.cover
-                ): new Icon(
+                  child: (art!=null) ? new Image.file(art): new Icon(
                     Icons.music_note,
                     color: Colors.white
                   )
               ),
-              title: new Text(s.title),
-              subtitle: new Text(s.artist),
+              title: new Text(song.title),
+              subtitle: new Text(song.artist),
               onTap: () {
                 if (!isPlaying) {
                   if(isPaused)
                     {
                       stop();
-                      play(s.uri);
+                      play(song.uri);
                       indexbackup = index;
                       setState(() {});
                     }
-                  play(s.uri);
+                  play(song.uri);
                   indexbackup = index;
                   setState(() {});
                 }
                 else
                   {
                     stop();
-                    play(s.uri);
+                    play(song.uri);
                     indexbackup = index;
                     setState(() {});
                   }
@@ -93,7 +90,7 @@ class _DextroState extends State<DextroApp> {
         }, //ItemBuilder
       ), //ListView.Builder
       bottomNavigationBar: new BottomAppBar(
-          color: Colors.black,
+          color: Colors.blue,
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
@@ -108,6 +105,14 @@ class _DextroState extends State<DextroApp> {
                     }
                   } //OnPressed
               ), //IconButton
+              (!isPlaying)? (isPaused? new Text(demsongs[indexbackup].title.toUpperCase(),
+                style: TextStyle(fontWeight: FontWeight.w800)
+              )
+                  : new Text('')
+              )
+                  : new Text(demsongs[indexbackup].title.toUpperCase(),
+                style: TextStyle(fontWeight: FontWeight.w800),
+              ),
               new IconButton(icon: (isPlaying)?Icon(Icons.pause):Icon(Icons.play_arrow),
                 color: Colors.white,
                 onPressed: () {
@@ -122,10 +127,9 @@ class _DextroState extends State<DextroApp> {
                 },
               ) //IconButton
             ], //<Widget>
-          ) //Row
+          ), //Row
       ), //BottomAppBar
     ); //Scaffold
   }
-
 }
 
