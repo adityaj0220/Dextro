@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flute_music_player/flute_music_player.dart';
+import 'dart:math';
+
+Song currentSong;
 
 class DextroApp extends StatefulWidget {
   @override
@@ -13,35 +16,57 @@ class _DextroState extends State<DextroApp> {
   List<Song> demsongs;
   var isPlaying = false;
   var indexbackup;
-  var isPaused=false;
+  var isPaused = false;
+  var isStopped = true;
 
   @override
   void initState() {
     super.initState();
-    getsongspls();
+    setsongs();
   }
 
   Future play(String url) async {
     audioPlayer.play(url, isLocal: true);
     isPlaying = true;
+    isStopped = false;
   }
 
   pause() async {
     audioPlayer.pause();
     isPlaying = false;
-    isPaused=true;
+    isPaused = true;
+    isStopped = false;
   }
 
   stop() async {
     audioPlayer.stop();
   }
 
-  void getsongspls() async {
+  void setsongs() async {
     audioPlayer = new MusicFinder();
     demsongs = await MusicFinder.allSongs();
     setState(() {});
   }
 
+  void _playSong(Song song, int index) {
+    currentSong = song;
+    if (!isPlaying) {
+      if (isPaused) {
+        stop();
+        play(song.uri);
+        indexbackup = index;
+        setState(() {});
+      }
+      play(song.uri);
+      indexbackup = index;
+      setState(() {});
+    } else {
+      stop();
+      play(song.uri);
+      indexbackup = index;
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,87 +74,72 @@ class _DextroState extends State<DextroApp> {
       appBar: new AppBar(
         backgroundColor: Colors.blue,
         title: new Text("Dextro"),
-      ), //AppBar
+      ),
       body: new ListView.builder(
         itemCount: (demsongs == null) ? 0 : demsongs.length,
         itemBuilder: (context, int index) {
           var song = demsongs[index];
-          var art = (song.albumArt == null) ? null : new File.fromUri(Uri.parse(song.albumArt));
+          var art = (song.albumArt == null)
+              ? null
+              : new File.fromUri(Uri.parse(song.albumArt));
           return new ListTile(
-              leading: new CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: (art!=null) ? new Image.file(art): new Icon(
-                    Icons.music_note,
-                    color: Colors.white
-                  )
-              ),
+              leading: (art == null)
+                  ? new CircleAvatar(
+                      child: new Icon(Icons.music_note, color: Colors.white),
+                      backgroundColor: HSLColor.fromAHSL(1.0, Random().nextDouble()*360, 0.75, 0.3).toColor(),
+                    )
+                  : new CircleAvatar(backgroundImage: new FileImage(art)),
               title: new Text(song.title),
               subtitle: new Text(song.artist),
-              onTap: () {
-                if (!isPlaying) {
-                  if(isPaused)
-                    {
-                      stop();
-                      play(song.uri);
-                      indexbackup = index;
-                      setState(() {});
-                    }
-                  play(song.uri);
-                  indexbackup = index;
-                  setState(() {});
-                }
-                else
-                  {
-                    stop();
-                    play(song.uri);
-                    indexbackup = index;
-                    setState(() {});
-                  }
-              } //OnTap
-          ); //ListTile
-        }, //ItemBuilder
-      ), //ListView.Builder
-      bottomNavigationBar: new BottomAppBar(
-          color: Colors.blue,
-          child: new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              new IconButton(icon: new Icon(Icons.keyboard_arrow_up),
-                  color: Colors.white,
-                  onPressed: () {
+              onTap: ()=>_playSong(song,index) //OnTap
+              );
+        },
+      ),
+      bottomNavigationBar: isStopped? null:new BottomAppBar(
+        color: Colors.blue,
+        child: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            new IconButton(
+                icon: new Icon(Icons.keyboard_arrow_up),
+                color: Colors.white,
+                onPressed: () {
                     try {
                       Navigator.of(context).pushNamed('/MusicLayout');
                     } catch (e) {
                       print(e.toString());
                     }
-                  } //OnPressed
-              ), //IconButton
-              (!isPlaying)? (isPaused? new Text(demsongs[indexbackup].title.toUpperCase(),
-                style: TextStyle(fontWeight: FontWeight.w800)
-              )
-                  : new Text('')
-              )
-                  : new Text(demsongs[indexbackup].title.toUpperCase(),
-                style: TextStyle(fontWeight: FontWeight.w800),
-              ),
-              new IconButton(icon: (isPlaying)?Icon(Icons.pause):Icon(Icons.play_arrow),
-                color: Colors.white,
-                onPressed: () {
-                  if (isPlaying) {
-                    pause();
-                    setState(() {});
-                  }
-                  else if(!isPlaying)
-                    { play(demsongs[indexbackup].uri);
-                      setState(() {});
-                    }
-                },
-              ) //IconButton
-            ], //<Widget>
-          ), //Row
-      ), //BottomAppBar
-    ); //Scaffold
+
+                } //OnPressed
+                ),
+            (!isPlaying)
+                ? (isPaused
+                    ? new Text(demsongs[indexbackup].title,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400, fontSize: 16.0))
+                    : new Text(''))
+                : new Text(
+                    demsongs[indexbackup].title,
+                    style:
+                        TextStyle(fontWeight: FontWeight.w400, fontSize: 16.0),
+                  ),
+            new IconButton(
+              icon: (isPlaying) ? Icon(Icons.pause) : Icon(Icons.play_arrow),
+              color: Colors.white,
+              onPressed: () {
+                if (isPlaying) {
+                  pause();
+                  setState(() {});
+                } else if (!isPlaying) {
+                  play(demsongs[indexbackup].uri);
+                  setState(() {});
+                }
+              },
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
-

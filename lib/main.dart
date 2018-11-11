@@ -1,4 +1,5 @@
 import 'package:Dextro/homepage.dart';
+import 'package:flute_music_player/flute_music_player.dart';
 import 'songinfo.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
 }
 
 class DextroAppWrapper extends StatefulWidget {
+
   @override
   _DextroAppWrapperState createState() => new _DextroAppWrapperState();
 }
