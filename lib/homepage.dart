@@ -71,8 +71,36 @@ class _DextroState extends State<DextroApp> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: null,
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('Username'),
+              decoration: BoxDecoration(
+                  color: Colors.indigoAccent
+              ),
+            ),
+            ListTile(
+              title: Text('Themes'),
+              onTap: null
+            ),
+            ListTile(
+              title: Text('About'),
+              onTap: null
+            )
+          ],
+        ),
+      ),
       appBar: new AppBar(
-        backgroundColor: Colors.blue,
+        leading: IconButton(
+          icon: new Icon(Icons.menu, color: Colors.white),
+          onPressed: () {
+            //TODO
+          },
+        ),
+        centerTitle: true,
         title: new Text("Dextro"),
       ),
       body: new ListView.builder(
@@ -86,60 +114,64 @@ class _DextroState extends State<DextroApp> {
               leading: (art == null)
                   ? new CircleAvatar(
                       child: new Icon(Icons.music_note, color: Colors.white),
-                      backgroundColor: HSLColor.fromAHSL(1.0, Random().nextDouble()*360, 0.75, 0.3).toColor(),
+                      backgroundColor: HSLColor.fromAHSL(
+                              1.0, Random().nextDouble() * 360, 0.75, 0.3)
+                          .toColor(),
                     )
                   : new CircleAvatar(backgroundImage: new FileImage(art)),
               title: new Text(song.title),
               subtitle: new Text(song.artist),
-              onTap: ()=>_playSong(song,index) //OnTap
+              onTap: () => _playSong(song, index) //OnTap
               );
         },
       ),
-      bottomNavigationBar: isStopped? null:new BottomAppBar(
-        color: Colors.blue,
-        child: new Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            new IconButton(
-                icon: new Icon(Icons.keyboard_arrow_up),
-                color: Colors.white,
-                onPressed: () {
-                    try {
-                      Navigator.of(context).pushNamed('/MusicLayout');
-                    } catch (e) {
-                      print(e.toString());
-                    }
-
-                } //OnPressed
-                ),
-            (!isPlaying)
-                ? (isPaused
-                    ? new Text(demsongs[indexbackup].title,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 16.0))
-                    : new Text(''))
-                : new Text(
-                    demsongs[indexbackup].title,
-                    style:
-                        TextStyle(fontWeight: FontWeight.w400, fontSize: 16.0),
-                  ),
-            new IconButton(
-              icon: (isPlaying) ? Icon(Icons.pause) : Icon(Icons.play_arrow),
-              color: Colors.white,
-              onPressed: () {
-                if (isPlaying) {
-                  pause();
-                  setState(() {});
-                } else if (!isPlaying) {
-                  play(demsongs[indexbackup].uri);
-                  setState(() {});
-                }
-              },
-            )
-          ],
-        ),
-      ),
+      bottomNavigationBar: isStopped
+          ? null
+          : new BottomAppBar(
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  new IconButton(
+                      icon: new Icon(Icons.keyboard_arrow_up),
+                      color: Colors.white,
+                      onPressed: () {
+                        try {
+                          Navigator.of(context).pushNamed('/MusicLayout');
+                        } catch (e) {
+                          print(e.toString());
+                        }
+                      } //OnPressed
+                      ),
+                  (!isPlaying)
+                      ? (isPaused
+                          ? new Text(demsongs[indexbackup].title,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400, fontSize: 16.0))
+                          : new Text(''))
+                      : new Text(
+                          demsongs[indexbackup].title,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 16.0),
+                        ),
+                  new IconButton(
+                    icon: (isPlaying)
+                        ? Icon(Icons.pause)
+                        : Icon(Icons.play_arrow),
+                    color: Colors.white,
+                    onPressed: () {
+                      if (isPlaying) {
+                        pause();
+                        setState(() {});
+                      } else if (!isPlaying) {
+                        play(demsongs[indexbackup].uri);
+                        setState(() {});
+                      }
+                    },
+                  )
+                ],
+              ),
+            ),
     );
   }
 }

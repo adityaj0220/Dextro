@@ -14,8 +14,20 @@ class MusicLayout extends StatefulWidget {
 class _MusicLayoutState extends State<MusicLayout> {
   Song song = currentSong;
   var isPlaying = false;
-  var indexbackup;
   var isPaused = false;
+  MusicFinder audioPlayer;
+
+  Future play(String url) async {
+    audioPlayer.play(url, isLocal: true);
+    isPlaying = true;
+  }
+
+  pause() async {
+    audioPlayer.pause();
+    isPlaying = false;
+    isPaused = true;
+  }
+
   //Color currentColor = Color((Random().nextDouble() * 0xFFFFFF).toInt() << 0)
   //    .withOpacity(1.0);
   Color currentColor = HSLColor.fromAHSL(1.0, Random().nextDouble()*360, 0.75, 0.3).toColor();
@@ -97,14 +109,21 @@ class _MusicLayoutState extends State<MusicLayout> {
                           elevation: 10.0,
                           highlightElevation: 5.0,
                           onPressed: (){
-
+                            if(isPlaying)
+                              pause();
+                            else if(isPaused)
+                              play(song.uri);
                           },
                           child: new Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: new Icon(
-                                Icons.play_arrow,
+                              child: isPlaying?new Icon(
+                                Icons.pause,
                                 color: currentColor,
-                              )),
+                              ):
+                                  new Icon(Icons.play_arrow,
+                                  color: currentColor
+                                  ),
+                          ),
                         ),
                         new Expanded(child: new Container()),
                         new IconButton(
