@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flute_music_player/flute_music_player.dart';
 import 'dart:io';
 import 'dart:math';
-
-Song currentSong;
+import 'package:Dextro/functions.dart';
 
 class FirstTab extends StatefulWidget{
   @override
@@ -12,43 +11,13 @@ class FirstTab extends StatefulWidget{
 
 class FirstTabState extends State<FirstTab>{
 
-  MusicFinder audioPlayer;
-  List<Song> demsongs;
-  var isPlaying = false;
-  var indexbackup;
-  var isPaused = false;
-  var isStopped = true;
-
   @override
   void initState() {
     super.initState();
     setsongs();
   }
 
-  Future play(String url) async {
-    audioPlayer.play(url, isLocal: true);
-    isPlaying = true;
-    isStopped = false;
-  }
-
-  pause() async {
-    audioPlayer.pause();
-    isPlaying = false;
-    isPaused = true;
-    isStopped = false;
-  }
-
-  stop() async {
-    audioPlayer.stop();
-  }
-
-  void setsongs() async {
-    audioPlayer = new MusicFinder();
-    demsongs = await MusicFinder.allSongs();
-    setState(() {});
-  }
-
-  void _playSong(Song song, int index) {
+  void playSong(Song song, int index) {
     currentSong = song;
     if (!isPlaying) {
       if (isPaused) {
@@ -68,13 +37,20 @@ class FirstTabState extends State<FirstTab>{
     }
   }
 
+
+    void setsongs() async {
+    audioPlayer = new MusicFinder();
+    songs = await MusicFinder.allSongs();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: new ListView.builder(
-        itemCount: (demsongs == null) ? 0 : demsongs.length,
+        itemCount: (songs == null) ? 0 : songs.length,
         itemBuilder: (context, int index) {
-          var song = demsongs[index];
+          var song = songs[index];
           var art = (song.albumArt == null)
               ? null
               : new File.fromUri(Uri.parse(song.albumArt));
@@ -89,7 +65,7 @@ class FirstTabState extends State<FirstTab>{
                   : new CircleAvatar(backgroundImage: new FileImage(art)),
               title: new Text(song.title),
               subtitle: new Text(song.artist),
-              onTap: () => _playSong(song, index) //OnTap
+              onTap: () => playSong(song, index) //OnTap
           );
         },
       ),
@@ -113,12 +89,12 @@ class FirstTabState extends State<FirstTab>{
             ),
             (!isPlaying)
                 ? (isPaused
-                ? new Text(demsongs[indexbackup].title,
+                ? new Text(songs[indexbackup].title,
                 style: TextStyle(
                     fontWeight: FontWeight.w400, fontSize: 16.0))
                 : new Text(''))
                 : new Text(
-              demsongs[indexbackup].title,
+              songs[indexbackup].title,
               style: TextStyle(
                   fontWeight: FontWeight.w400, fontSize: 16.0),
             ),
@@ -132,7 +108,7 @@ class FirstTabState extends State<FirstTab>{
                   pause();
                   setState(() {});
                 } else if (!isPlaying) {
-                  play(demsongs[indexbackup].uri);
+                  play(songs[indexbackup].uri);
                   setState(() {});
                 }
               },

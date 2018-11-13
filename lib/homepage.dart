@@ -3,10 +3,7 @@ import 'package:Dextro/secondtab.dart' as secondtab;
 import 'package:Dextro/thirdtab.dart' as thirdtab;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flute_music_player/flute_music_player.dart';
-import 'dart:math';
-
-Song currentSong;
+import 'package:Dextro/functions.dart';
 
 class DextroApp extends StatefulWidget {
   @override
@@ -77,6 +74,8 @@ class _DextroState extends State<DextroApp>
             new firsttab.FirstTab(),
         new secondtab.SecondTab(),
         new thirdtab.ThirdTab()
-        ]),);
+        ]
+        ),
+    );
   }
 }

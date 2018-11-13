@@ -3,7 +3,7 @@ import 'package:Dextro/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flute_music_player/flute_music_player.dart';
-import 'package:Dextro/homepage.dart';
+import 'package:Dextro/functions.dart';
 import 'dart:math';
 
 class MusicLayout extends StatefulWidget {
