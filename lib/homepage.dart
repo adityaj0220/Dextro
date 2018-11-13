@@ -1,4 +1,6 @@
-import 'dart:io';
+import 'package:Dextro/firsttab.dart' as firsttab;
+import 'package:Dextro/secondtab.dart' as secondtab;
+import 'package:Dextro/thirdtab.dart' as thirdtab;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flute_music_player/flute_music_player.dart';
@@ -11,61 +13,21 @@ class DextroApp extends StatefulWidget {
   _DextroState createState() => new _DextroState();
 }
 
-class _DextroState extends State<DextroApp> {
-  MusicFinder audioPlayer;
-  List<Song> demsongs;
-  var isPlaying = false;
-  var indexbackup;
-  var isPaused = false;
-  var isStopped = true;
+class _DextroState extends State<DextroApp>
+    with SingleTickerProviderStateMixin {
+
+  TabController controller;
 
   @override
   void initState() {
     super.initState();
-    setsongs();
+    controller = new TabController(length: 3, vsync: this);
   }
 
-  Future play(String url) async {
-    audioPlayer.play(url, isLocal: true);
-    isPlaying = true;
-    isStopped = false;
-  }
-
-  pause() async {
-    audioPlayer.pause();
-    isPlaying = false;
-    isPaused = true;
-    isStopped = false;
-  }
-
-  stop() async {
-    audioPlayer.stop();
-  }
-
-  void setsongs() async {
-    audioPlayer = new MusicFinder();
-    demsongs = await MusicFinder.allSongs();
-    setState(() {});
-  }
-
-  void _playSong(Song song, int index) {
-    currentSong = song;
-    if (!isPlaying) {
-      if (isPaused) {
-        stop();
-        play(song.uri);
-        indexbackup = index;
-        setState(() {});
-      }
-      play(song.uri);
-      indexbackup = index;
-      setState(() {});
-    } else {
-      stop();
-      play(song.uri);
-      indexbackup = index;
-      setState(() {});
-    }
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -83,95 +45,38 @@ class _DextroState extends State<DextroApp> {
               ),
             ),
             ListTile(
-              title: Text('Themes'),
-              onTap: null
+                title: Text('Themes'),
+                onTap: null
             ),
             ListTile(
-              title: Text('About'),
-              onTap: null
+                title: Text('About'),
+                onTap: null
             )
           ],
         ),
       ),
-      appBar: new AppBar(
-        leading: IconButton(
-          icon: new Icon(Icons.menu, color: Colors.white),
-          onPressed: () {
-            //TODO
-          },
+        appBar: new AppBar(
+          leading: IconButton(
+            icon: new Icon(Icons.menu, color: Colors.white),
+            onPressed: null,
+          ),
+          centerTitle: true,
+          title: new Text("Dextro"),
+          bottom: new TabBar(
+            controller: controller,
+            tabs: <Widget>[
+              new Tab(icon: new Icon(Icons.music_note)),
+              new Tab(icon: new Icon(Icons.album)),
+              new Tab(icon: new Icon(Icons.person))
+            ],
+          ),
         ),
-        centerTitle: true,
-        title: new Text("Dextro"),
-      ),
-      body: new ListView.builder(
-        itemCount: (demsongs == null) ? 0 : demsongs.length,
-        itemBuilder: (context, int index) {
-          var song = demsongs[index];
-          var art = (song.albumArt == null)
-              ? null
-              : new File.fromUri(Uri.parse(song.albumArt));
-          return new ListTile(
-              leading: (art == null)
-                  ? new CircleAvatar(
-                      child: new Icon(Icons.music_note, color: Colors.white),
-                      backgroundColor: HSLColor.fromAHSL(
-                              1.0, Random().nextDouble() * 360, 0.75, 0.3)
-                          .toColor(),
-                    )
-                  : new CircleAvatar(backgroundImage: new FileImage(art)),
-              title: new Text(song.title),
-              subtitle: new Text(song.artist),
-              onTap: () => _playSong(song, index) //OnTap
-              );
-        },
-      ),
-      bottomNavigationBar: isStopped
-          ? null
-          : new BottomAppBar(
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  new IconButton(
-                      icon: new Icon(Icons.keyboard_arrow_up),
-                      color: Colors.white,
-                      onPressed: () {
-                        try {
-                          Navigator.of(context).pushNamed('/MusicLayout');
-                        } catch (e) {
-                          print(e.toString());
-                        }
-                      } //OnPressed
-                      ),
-                  (!isPlaying)
-                      ? (isPaused
-                          ? new Text(demsongs[indexbackup].title,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 16.0))
-                          : new Text(''))
-                      : new Text(
-                          demsongs[indexbackup].title,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 16.0),
-                        ),
-                  new IconButton(
-                    icon: (isPlaying)
-                        ? Icon(Icons.pause)
-                        : Icon(Icons.play_arrow),
-                    color: Colors.white,
-                    onPressed: () {
-                      if (isPlaying) {
-                        pause();
-                        setState(() {});
-                      } else if (!isPlaying) {
-                        play(demsongs[indexbackup].uri);
-                        setState(() {});
-                      }
-                    },
-                  )
-                ],
-              ),
-            ),
-    );
+        body: new TabBarView(
+            controller: controller,
+            children: <Widget>[
+            new firsttab.FirstTab(),
+        new secondtab.SecondTab(),
+        new thirdtab.ThirdTab()
+        ]),);
   }
 }
