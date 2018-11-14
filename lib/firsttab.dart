@@ -62,12 +62,32 @@ class FirstTabState extends State<FirstTab> {
                     )
                   : new CircleAvatar(backgroundImage: new FileImage(art)),
               title: new Text(song.title),
-              subtitle: (song.artist=='<unknown>') ? new Text('Unknown'): new Text(song.artist),
+              subtitle: (song.artist == '<unknown>')
+                  ? new Text('Unknown')
+                  : new Text(song.artist),
               onTap: () {
                 playSong(song, index, songs);
               } //OnTap
               );
         },
+      ),
+      floatingActionButton: new FloatingActionButton(
+        onPressed: () {
+          int n = new Random().nextInt(songs.length - 1);
+          if (isStopped) {
+            playSong(currentSong, n, songs);
+            currentSong = songs[n];
+          } else if (isPaused || isPlaying) {
+            stop();
+            playSong(currentSong, n, songs);
+            currentSong = songs[n];
+          }
+          setState(() {});
+        },
+        child: new Icon(
+          Icons.shuffle,
+          color: Colors.black,
+        ),
       ),
       bottomNavigationBar: isStopped
           ? null
@@ -108,7 +128,7 @@ class FirstTabState extends State<FirstTab> {
                         pause();
                         setState(() {});
                       } else if (!isPlaying) {
-                        play(songs[indexbackup].uri);
+                        playSong(currentSong, indexbackup, songs);
                         setState(() {});
                       }
                     },

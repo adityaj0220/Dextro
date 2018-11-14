@@ -12,7 +12,6 @@ class MusicLayout extends StatefulWidget {
 }
 
 class _MusicLayoutState extends State<MusicLayout> {
-
   //Color currentColor = Color((Random().nextDouble() * 0xFFFFFF).toInt() << 0)
   //    .withOpacity(1.0);
   Color currentColor =
@@ -65,19 +64,21 @@ class _MusicLayoutState extends State<MusicLayout> {
                         letterSpacing: 2.0,
                         height: 1.5,
                       )),
-            (currentSong.artist=='<unknown>')?new Text('UNKNOWN',
-                      style: new TextStyle(
-                        color: Colors.white.withOpacity(0.75),
-                        fontSize: 12.0,
-                        letterSpacing: 2.0,
-                        height: 1.5,
-                      )):new Text(currentSong.artist.toUpperCase(),
-                      style: new TextStyle(
-                        color: Colors.white.withOpacity(0.75),
-                        fontSize: 12.0,
-                        letterSpacing: 2.0,
-                        height: 1.5,
-                      )),
+                  (currentSong.artist == '<unknown>')
+                      ? new Text('UNKNOWN',
+                          style: new TextStyle(
+                            color: Colors.white.withOpacity(0.75),
+                            fontSize: 12.0,
+                            letterSpacing: 2.0,
+                            height: 1.5,
+                          ))
+                      : new Text(currentSong.artist.toUpperCase(),
+                          style: new TextStyle(
+                            color: Colors.white.withOpacity(0.75),
+                            fontSize: 12.0,
+                            letterSpacing: 2.0,
+                            height: 1.5,
+                          )),
                   Padding(
                     padding: const EdgeInsets.only(top: 70.0),
                     child: new Row(
@@ -92,8 +93,10 @@ class _MusicLayoutState extends State<MusicLayout> {
                             onPressed: () {
                               if (isPlaying || isPaused) {
                                 stop();
-                                play(prevsong(songs, currentSong, indexbackup).uri);
-                                currentSong = prevsong(songs, currentSong, indexbackup);
+                                play(prevsong(songs, currentSong, indexbackup)
+                                    .uri);
+                                currentSong =
+                                    prevsong(songs, currentSong, indexbackup);
                                 if (indexbackup != 0) indexbackup--;
                                 setState(() {});
                               }
@@ -136,8 +139,10 @@ class _MusicLayoutState extends State<MusicLayout> {
                             onPressed: () {
                               if (isPlaying || isPaused) {
                                 stop();
-                                play(nextsong(songs, currentSong, indexbackup).uri);
-                                currentSong = nextsong(songs, currentSong, indexbackup);
+                                play(nextsong(songs, currentSong, indexbackup)
+                                    .uri);
+                                currentSong =
+                                    nextsong(songs, currentSong, indexbackup);
                                 if (indexbackup != songs.length - 1)
                                   indexbackup++;
                                 setState(() {});
