@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flute_music_player/flute_music_player.dart';
 import 'dart:io';
 import 'dart:math';
-import 'package:Dextro/functions.dart';
+import 'package:Dextro/data.dart';
 
-class FirstTab extends StatefulWidget{
+class FirstTab extends StatefulWidget {
   @override
   FirstTabState createState() => new FirstTabState();
 }
 
-class FirstTabState extends State<FirstTab>{
-
+class FirstTabState extends State<FirstTab> {
   @override
   void initState() {
     super.initState();
@@ -37,8 +36,7 @@ class FirstTabState extends State<FirstTab>{
     }
   }
 
-
-    void setsongs() async {
+  void setsongs() async {
     audioPlayer = new MusicFinder();
     songs = await MusicFinder.allSongs();
     setState(() {});
@@ -57,65 +55,69 @@ class FirstTabState extends State<FirstTab>{
           return new ListTile(
               leading: (art == null)
                   ? new CircleAvatar(
-                child: new Icon(Icons.music_note, color: Colors.white),
-                backgroundColor: HSLColor.fromAHSL(
-                    1.0, Random().nextDouble() * 360, 0.75, 0.3)
-                    .toColor(),
-              )
+                      child: new Icon(Icons.music_note, color: Colors.white),
+                      backgroundColor: HSLColor.fromAHSL(
+                              1.0, Random().nextDouble() * 360, 0.75, 0.3)
+                          .toColor(),
+                    )
                   : new CircleAvatar(backgroundImage: new FileImage(art)),
               title: new Text(song.title),
               subtitle: new Text(song.artist),
-              onTap: () => playSong(song, index) //OnTap
-          );
+              onTap: () {
+                playSong(song, index);
+                nextSong=(index==songs.length)?songs[0]:songs[index+1];
+                previousSong=(index==songs[0])?songs[songs.length]:songs[index-1];
+              } //OnTap
+              );
         },
       ),
       bottomNavigationBar: isStopped
           ? null
           : new BottomAppBar(
-        child: new Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            new IconButton(
-                icon: new Icon(Icons.keyboard_arrow_up),
-                color: Colors.white,
-                onPressed: () {
-                  try {
-                    Navigator.of(context).pushNamed('/MusicLayout');
-                  } catch (e) {
-                    print(e.toString());
-                  }
-                } //OnPressed
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  new IconButton(
+                      icon: new Icon(Icons.keyboard_arrow_up),
+                      color: Colors.white,
+                      onPressed: () {
+                        try {
+                          Navigator.of(context).pushNamed('/MusicLayout');
+                        } catch (e) {
+                          print(e.toString());
+                        }
+                      } //OnPressed
+                      ),
+                  (!isPlaying)
+                      ? (isPaused
+                          ? new Text(songs[indexbackup].title,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400, fontSize: 16.0))
+                          : new Text(''))
+                      : new Text(
+                          songs[indexbackup].title,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 16.0),
+                        ),
+                  new IconButton(
+                    icon: (isPlaying)
+                        ? Icon(Icons.pause)
+                        : Icon(Icons.play_arrow),
+                    color: Colors.white,
+                    onPressed: () {
+                      if (isPlaying) {
+                        pause();
+                        setState(() {});
+                      } else if (!isPlaying) {
+                        play(songs[indexbackup].uri);
+                        setState(() {});
+                      }
+                    },
+                  )
+                ],
+              ),
             ),
-            (!isPlaying)
-                ? (isPaused
-                ? new Text(songs[indexbackup].title,
-                style: TextStyle(
-                    fontWeight: FontWeight.w400, fontSize: 16.0))
-                : new Text(''))
-                : new Text(
-              songs[indexbackup].title,
-              style: TextStyle(
-                  fontWeight: FontWeight.w400, fontSize: 16.0),
-            ),
-            new IconButton(
-              icon: (isPlaying)
-                  ? Icon(Icons.pause)
-                  : Icon(Icons.play_arrow),
-              color: Colors.white,
-              onPressed: () {
-                if (isPlaying) {
-                  pause();
-                  setState(() {});
-                } else if (!isPlaying) {
-                  play(songs[indexbackup].uri);
-                  setState(() {});
-                }
-              },
-            )
-          ],
-        ),
-      ),
     );
   }
 }

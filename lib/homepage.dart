@@ -3,7 +3,7 @@ import 'package:Dextro/secondtab.dart' as secondtab;
 import 'package:Dextro/thirdtab.dart' as thirdtab;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:Dextro/functions.dart';
+import 'package:Dextro/data.dart';
 
 class DextroApp extends StatefulWidget {
   @override

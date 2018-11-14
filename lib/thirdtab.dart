@@ -1,6 +1,6 @@
 import 'package:flute_music_player/flute_music_player.dart';
 import 'package:flutter/material.dart';
-import 'package:Dextro/functions.dart';
+import 'package:Dextro/data.dart';
 
 class ThirdTab extends StatefulWidget {
   @override
@@ -27,7 +27,12 @@ class ThirdTabState extends State<ThirdTab> {
         if (l[i].artist == l[j].artist)
           break;
       if (i == j)
-        ret.add(l[i].artist);
+        {
+          if(l[i].artist=='<unknown>')
+            ret.add('Unknown');
+          else
+            ret.add(l[i].artist);
+        }
     }
     return ret;
   }

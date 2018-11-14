@@ -1,6 +1,6 @@
 import 'package:flute_music_player/flute_music_player.dart';
 import 'package:flutter/material.dart';
-import 'package:Dextro/functions.dart';
+import 'package:Dextro/data.dart';
 
 class SecondTab extends StatefulWidget{
   @override

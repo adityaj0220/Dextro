@@ -3,7 +3,7 @@ import 'package:Dextro/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flute_music_player/flute_music_player.dart';
-import 'package:Dextro/functions.dart';
+import 'package:Dextro/data.dart';
 import 'dart:math';
 
 class MusicLayout extends StatefulWidget {
@@ -12,21 +12,9 @@ class MusicLayout extends StatefulWidget {
 }
 
 class _MusicLayoutState extends State<MusicLayout> {
-  Song song = currentSong;
-  var isPlaying = false;
-  var isPaused = false;
-  MusicFinder audioPlayer;
-
-  Future play(String url) async {
-    audioPlayer.play(url, isLocal: true);
-    isPlaying = true;
-  }
-
-  pause() async {
-    audioPlayer.pause();
-    isPlaying = false;
-    isPaused = true;
-  }
+  Song song= currentSong;
+  Song nextsong= nextSong;
+  Song previoussong=previousSong;
 
   //Color currentColor = Color((Random().nextDouble() * 0xFFFFFF).toInt() << 0)
   //    .withOpacity(1.0);
@@ -98,7 +86,11 @@ class _MusicLayoutState extends State<MusicLayout> {
                               size: 35.0,
                             ),
                             onPressed: () {
-                              //TODO
+                              if(isPlaying || isPaused)
+                                {
+                                  stop();
+                                  play(previoussong.uri);
+                                }
                             }),
                         new Expanded(child: new Container()),
                         new RawMaterialButton(
@@ -109,14 +101,18 @@ class _MusicLayoutState extends State<MusicLayout> {
                           elevation: 10.0,
                           highlightElevation: 5.0,
                           onPressed: (){
-                            if(isPlaying)
+                            if(isPlaying) {
                               pause();
-                            else if(isPaused)
+                              setState(() {});
+                            }
+                            else if(isPaused) {
                               play(song.uri);
+                              setState(() {});
+                            }
                           },
                           child: new Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: isPlaying?new Icon(
+                              child: isPlaying ? new Icon(
                                 Icons.pause,
                                 color: currentColor,
                               ):
@@ -133,7 +129,7 @@ class _MusicLayoutState extends State<MusicLayout> {
                               size: 35.0,
                             ),
                             onPressed: () {
-                              //TODO
+                              play(nextsong.uri);
                             }),
                         new Expanded(child: new Container()),
                       ],
