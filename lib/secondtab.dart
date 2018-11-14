@@ -1,3 +1,4 @@
+import 'package:flute_music_player/flute_music_player.dart';
 import 'package:flutter/material.dart';
 import 'package:Dextro/functions.dart';
 
@@ -7,9 +8,48 @@ class SecondTab extends StatefulWidget{
 }
 
 class SecondTabState extends State<SecondTab>{
+
+  List<Song> albumsongs;
+  MusicFinder audioPlayer;
+  List<String> albumList;
+
+  void setalbumsongs() async {
+    audioPlayer = new MusicFinder();
+    albumsongs = await MusicFinder.allSongs();
+    albumList = filteralbums(albumsongs);
+    setState(() {});
+  }
+
+  List<String> filteralbums(List<Song> l) {
+    List<String> ret = new List();
+    for (int i = 0; i < l.length; i++) {
+      int j;
+      for (j = 0; j < i; j++)
+        if (l[i].album == l[j].album)
+          break;
+      if (i == j)
+        ret.add(l[i].album);
+    }
+    return ret;
+  }
+
+  void initState() {
+    super.initState();
+    setalbumsongs();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      body: new ListView.builder(
+        itemCount: (albumList == null) ? 0 : albumList.length,
+        itemBuilder: (context, int index) {
+          return new ListTile(
+            title: new Text(albumList.elementAt(index)),
+          );
+        },
+      ),
       bottomNavigationBar: isStopped
           ? null
           : new BottomAppBar(
