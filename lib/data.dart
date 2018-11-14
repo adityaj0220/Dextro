@@ -29,43 +29,26 @@ stop() async {
   isStopped = true;
 }
 
-class Data {
-  List<Song> _songs;
-  int _currentSongIndex = -1;
-  MusicFinder musicFinder;
-  Data(this._songs) {
-    musicFinder = new MusicFinder();
-  }
-
-  List<Song> get songs => _songs;
-  int get length => _songs.length;
-  int get songNumber => _currentSongIndex + 1;
-
-  setCurrentIndex(int index) {
-    _currentSongIndex = index;
-  }
-
-  int get currentIndex => _currentSongIndex;
-
-  Song get nextSong {
-    if (_currentSongIndex < length) {
-      _currentSongIndex++;
+Song nextsong(List<Song> songs, Song currentSong, int index) {
+  int nextindex;
+  if (index == songs.length - 1) {
+    return songs[index];
+  } else {
+    for (int i = 0; i < songs.length; i++) {
+      if (songs[i].title == currentSong.title) nextindex = i + 1;
     }
-    if (_currentSongIndex >= length) return null;
-    return _songs[_currentSongIndex];
-  }
-
-  Song get randomSong {
-    Random r = new Random();
-    return _songs[r.nextInt(_songs.length)];
-  }
-
-  Song get prevSong {
-    if (_currentSongIndex > 0) {
-      _currentSongIndex--;
-    }
-    if (_currentSongIndex < 0) return null;
-    return _songs[_currentSongIndex];
+    return songs[nextindex];
   }
 }
 
+Song prevsong(List<Song> songs, Song currentSong, int index) {
+  int previndex;
+  if (index == 0) {
+    return songs[0];
+  } else {
+    for (int i = 0; i < songs.length; i++) {
+      if (songs[i].title == currentSong.title) previndex = i - 1;
+    }
+    return songs[previndex];
+  }
+}

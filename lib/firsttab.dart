@@ -16,7 +16,7 @@ class FirstTabState extends State<FirstTab> {
     setsongs();
   }
 
-  void playSong(Song song, int index) {
+  void playSong(Song song, int index, List<Song> Songs) {
     currentSong = song;
     if (!isPlaying) {
       if (isPaused) {
@@ -62,11 +62,9 @@ class FirstTabState extends State<FirstTab> {
                     )
                   : new CircleAvatar(backgroundImage: new FileImage(art)),
               title: new Text(song.title),
-              subtitle: new Text(song.artist),
+              subtitle: (song.artist=='<unknown>') ? new Text('Unknown'): new Text(song.artist),
               onTap: () {
-                playSong(song, index);
-                nextSong=(index==songs.length)?songs[0]:songs[index+1];
-                previousSong=(index==songs[0])?songs[songs.length]:songs[index-1];
+                playSong(song, index, songs);
               } //OnTap
               );
         },
