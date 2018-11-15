@@ -16,7 +16,7 @@ class FirstTabState extends State<FirstTab> {
     setsongs();
   }
 
-  void playSong(Song song, int index, List<Song> Songs) {
+  void playSong(Song song, int index) {
     currentSong = song;
     if (!isPlaying) {
       if (isPaused) {
@@ -66,7 +66,7 @@ class FirstTabState extends State<FirstTab> {
                   ? new Text('Unknown')
                   : new Text(song.artist),
               onTap: () {
-                playSong(song, index, songs);
+                playSong(song, index);
               } //OnTap
               );
         },
@@ -76,11 +76,11 @@ class FirstTabState extends State<FirstTab> {
           int n = new Random().nextInt(songs.length - 1);
           if (isStopped) {
             currentSong = songs[n];
-            playSong(currentSong, n, songs);
+            playSong(currentSong, n);
           } else if (isPaused || isPlaying) {
             stop();
             currentSong = songs[n];
-            playSong(currentSong, n, songs);
+            playSong(currentSong, n);
           }
           setState(() {});
         },
@@ -128,7 +128,7 @@ class FirstTabState extends State<FirstTab> {
                         pause();
                         setState(() {});
                       } else if (!isPlaying) {
-                        playSong(currentSong, indexbackup, songs);
+                        playSong(currentSong, indexbackup);
                         setState(() {});
                       }
                     },

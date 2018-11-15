@@ -9,6 +9,7 @@ var isStopped = true;
 Song currentSong;
 Song previousSong;
 Song nextSong;
+String album;
 
 Future play(String url) async {
   audioPlayer.play(url, isLocal: true);
