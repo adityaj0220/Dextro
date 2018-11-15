@@ -82,6 +82,7 @@ class ArtistSongState extends State<ArtistSong>{
               subtitle: new Text(songs[index].artist),
               onTap: (){
                 playSong(songs[index], index);
+                currentPlaylist=songs;
               },
             );
       }),

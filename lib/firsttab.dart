@@ -67,6 +67,7 @@ class FirstTabState extends State<FirstTab> {
                   : new Text(song.artist),
               onTap: () {
                 playSong(song, index);
+                currentPlaylist=songs;
               } //OnTap
               );
         },

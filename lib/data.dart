@@ -2,6 +2,7 @@ import 'package:flute_music_player/flute_music_player.dart';
 
 MusicFinder audioPlayer;
 List<Song> songs;
+List<Song> currentPlaylist;
 var isPlaying = false;
 var indexbackup;
 var isPaused = false;
