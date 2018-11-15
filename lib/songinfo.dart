@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:Dextro/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flute_music_player/flute_music_player.dart';
+import 'package:Dextro/firsttab.dart';
 import 'package:Dextro/data.dart';
 import 'dart:math';
 
@@ -19,19 +19,12 @@ class _MusicLayoutState extends State<MusicLayout> {
 
   @override
   Widget build(BuildContext context) {
+    var nowplaying = songs[indexbackup];
+    var art = (nowplaying.albumArt == null)
+        ? null
+        : nowplaying.albumArt;
     return Scaffold(
-      appBar: new AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        leading: new IconButton(
-            icon: new Icon(
-              Icons.arrow_back_ios,
-              color: icons,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-      ),
+
       body: new Column(
         children: <Widget>[
           //Seek bar
@@ -39,12 +32,11 @@ class _MusicLayoutState extends State<MusicLayout> {
             //Album Art
             child: new Center(
               child: new Container(
-                width: 125.0,
-                height: 125.0,
-                child: new DecoratedBox(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/butmun.jpg')))),
+                width: 999.9,
+                height: 999.9,
+                child: (art==null)?null:Image.asset(art,
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
           ),
