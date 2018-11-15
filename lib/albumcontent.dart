@@ -9,7 +9,6 @@ class AlbumSong extends StatefulWidget{
 
 class AlbumSongState extends State<AlbumSong>{
 
-  List<Song> songsinalbum;
 
   @override
   void initState() {
@@ -20,7 +19,7 @@ class AlbumSongState extends State<AlbumSong>{
   void setsongs() async {
     audioPlayer = new MusicFinder();
     songs = await MusicFinder.allSongs();
-    songsinalbum = await showsongsofalbum(songs);
+    songs= await showsongsofalbum(songs);
     setState(() {});
   }
 
@@ -62,13 +61,13 @@ class AlbumSongState extends State<AlbumSong>{
         backgroundColor: Colors.indigoAccent,
       ),
       body: new ListView.builder(
-          itemCount: (songsinalbum==null) ? 0 : songsinalbum.length,
+          itemCount: (songs==null) ? 0 : songs.length,
       itemBuilder: (context, int index){
         return new ListTile(
-          title: new Text(songsinalbum[index].title),
-          subtitle: new Text(songsinalbum[index].artist),
+          title: new Text(songs[index].title),
+          subtitle: new Text(songs[index].artist),
           onTap: (){
-            playSong(songsinalbum[index], index);
+            playSong(songs[index], index);
           },
         );
       }),
