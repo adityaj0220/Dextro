@@ -75,12 +75,12 @@ class FirstTabState extends State<FirstTab> {
         onPressed: () {
           int n = new Random().nextInt(songs.length - 1);
           if (isStopped) {
-            playSong(currentSong, n, songs);
             currentSong = songs[n];
+            playSong(currentSong, n, songs);
           } else if (isPaused || isPlaying) {
             stop();
-            playSong(currentSong, n, songs);
             currentSong = songs[n];
+            playSong(currentSong, n, songs);
           }
           setState(() {});
         },
