@@ -53,6 +53,7 @@ class _DextroState extends State<DextroApp>
         ),
       ),
         appBar: new AppBar(
+          backgroundColor: Colors.indigoAccent,
           leading: IconButton(
             icon: new Icon(Icons.menu, color: Colors.white),
             onPressed: null,

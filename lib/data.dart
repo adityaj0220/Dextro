@@ -10,6 +10,7 @@ Song currentSong;
 Song previousSong;
 Song nextSong;
 String album;
+String artist;
 
 Future play(String url) async {
   audioPlayer.play(url, isLocal: true);

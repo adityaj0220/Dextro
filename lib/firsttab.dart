@@ -92,6 +92,7 @@ class FirstTabState extends State<FirstTab> {
       bottomNavigationBar: isStopped
           ? null
           : new BottomAppBar(
+        color: Colors.indigoAccent,
               child: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,

@@ -44,12 +44,17 @@ class ThirdTabState extends State<ThirdTab> {
         itemBuilder: (context, int index) {
           return new ListTile(
             title: new Text(artistList.elementAt(index)),
+            onTap: (){
+              artist = artistList.elementAt(index);
+              Navigator.of(context).pushNamed('/ArtistSong');
+            },
           );
         },
       ),
       bottomNavigationBar: isStopped
           ? null
           : new BottomAppBar(
+        color: Colors.indigoAccent,
               child: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,
