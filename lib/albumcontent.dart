@@ -34,6 +34,7 @@ class AlbumSongState extends State<AlbumSong> {
 
   void playSong(Song song, int index) {
     currentSong = song;
+    currentPlaylist=songs;
     if (!isPlaying) {
       if (isPaused) {
         stop();
@@ -56,7 +57,7 @@ class AlbumSongState extends State<AlbumSong> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Dextro'),
+        title: new Text('Albums'),
         backgroundColor: Colors.indigoAccent,
       ),
       body: new ListView.builder(
@@ -79,7 +80,6 @@ class AlbumSongState extends State<AlbumSong> {
               subtitle: new Text(songs[index].artist),
               onTap: () {
                 playSong(songs[index], index);
-                currentPlaylist=songs;
               },
             );
           }),

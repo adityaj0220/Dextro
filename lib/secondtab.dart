@@ -69,12 +69,12 @@ class SecondTabState extends State<SecondTab> {
                       ),
                   (!isPlaying)
                       ? (isPaused
-                          ? new Text(songs[indexbackup].title,
+                          ? new Text(currentPlaylist[indexbackup].title,
                               style: TextStyle(
                                   fontWeight: FontWeight.w400, fontSize: 16.0))
                           : new Text(''))
                       : new Text(
-                          songs[indexbackup].title,
+                          currentPlaylist[indexbackup].title,
                           style: TextStyle(
                               fontWeight: FontWeight.w400, fontSize: 16.0),
                         ),
@@ -88,7 +88,7 @@ class SecondTabState extends State<SecondTab> {
                         pause();
                         setState(() {});
                       } else if (!isPlaying) {
-                        play(songs[indexbackup].uri);
+                        play(currentPlaylist[indexbackup].uri);
                         setState(() {});
                       }
                     },

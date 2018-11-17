@@ -37,6 +37,7 @@ class ArtistSongState extends State<ArtistSong>{
 
   void playSong(Song song, int index) {
     currentSong = song;
+    currentPlaylist=songs;
     if (!isPlaying) {
       if (isPaused) {
         stop();
@@ -59,7 +60,7 @@ class ArtistSongState extends State<ArtistSong>{
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Dextro'),
+        title: new Text('Artists'),
         backgroundColor: Colors.indigoAccent,
       ),
       body: new ListView.builder(
@@ -82,7 +83,6 @@ class ArtistSongState extends State<ArtistSong>{
               subtitle: new Text(songs[index].artist),
               onTap: (){
                 playSong(songs[index], index);
-                currentPlaylist=songs;
               },
             );
       }),
@@ -105,12 +105,12 @@ class ArtistSongState extends State<ArtistSong>{
             ),
             (!isPlaying)
                 ? (isPaused
-                ? new Text(songs[indexbackup].title,
+                ? new Text(currentPlaylist[indexbackup].title,
                 style: TextStyle(
                     fontWeight: FontWeight.w400, fontSize: 16.0))
                 : new Text(''))
                 : new Text(
-              songs[indexbackup].title,
+              currentPlaylist[indexbackup].title,
               style: TextStyle(
                   fontWeight: FontWeight.w400, fontSize: 16.0),
             ),

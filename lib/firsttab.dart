@@ -111,12 +111,12 @@ class FirstTabState extends State<FirstTab> {
                       ),
                   (!isPlaying)
                       ? (isPaused
-                          ? new Text(songs[indexbackup].title,
+                          ? new Text(currentPlaylist[indexbackup].title,
                               style: TextStyle(
                                   fontWeight: FontWeight.w400, fontSize: 16.0))
                           : new Text(''))
                       : new Text(
-                          songs[indexbackup].title,
+                          currentPlaylist[indexbackup].title,
                           style: TextStyle(
                               fontWeight: FontWeight.w400, fontSize: 16.0),
                         ),
