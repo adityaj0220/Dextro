@@ -18,6 +18,7 @@ class FirstTabState extends State<FirstTab> {
 
   void playSong(Song song, int index) {
     currentSong = song;
+    currentPlaylist = songs;
     if (!isPlaying) {
       if (isPaused) {
         stop();
@@ -67,7 +68,7 @@ class FirstTabState extends State<FirstTab> {
                   : new Text(song.artist),
               onTap: () {
                 playSong(song, index);
-                currentPlaylist=songs;
+                currentPlaylist = songs;
               } //OnTap
               );
         },
@@ -93,7 +94,7 @@ class FirstTabState extends State<FirstTab> {
       bottomNavigationBar: isStopped
           ? null
           : new BottomAppBar(
-        color: Colors.indigoAccent,
+              color: Colors.indigoAccent,
               child: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,

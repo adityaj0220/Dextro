@@ -3,7 +3,6 @@ import 'package:Dextro/secondtab.dart' as secondtab;
 import 'package:Dextro/thirdtab.dart' as thirdtab;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:Dextro/data.dart';
 
 class DextroApp extends StatefulWidget {
   @override
@@ -43,21 +42,21 @@ class _DextroState extends State<DextroApp>
             ),
             ListTile(
                 title: Text('Themes'),
-                onTap: null
+                onTap: (){
+                  
+                },
             ),
             ListTile(
                 title: Text('About'),
-                onTap: null
+                onTap: (){
+                  Navigator.of(context).pushNamed('/AboutPage');
+                }
             )
           ],
         ),
       ),
         appBar: new AppBar(
           backgroundColor: Colors.indigoAccent,
-          leading: IconButton(
-            icon: new Icon(Icons.menu, color: Colors.white),
-            onPressed: null,
-          ),
           centerTitle: true,
           title: new Text("Dextro"),
           bottom: new TabBar(
@@ -80,3 +79,4 @@ class _DextroState extends State<DextroApp>
     );
   }
 }
+

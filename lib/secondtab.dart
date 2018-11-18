@@ -8,18 +8,17 @@ class SecondTab extends StatefulWidget {
 }
 
 class SecondTabState extends State<SecondTab> {
-  List<Song> albumsongs;
-  MusicFinder audioPlayer;
+
   List<String> albumList;
 
   void setalbumsongs() async {
     audioPlayer = new MusicFinder();
-    albumsongs = await MusicFinder.allSongs();
-    albumList = filteralbums(albumsongs);
+    songs = await MusicFinder.allSongs();
+    albumList = await filteralbums(songs);
     setState(() {});
   }
 
-  List<String> filteralbums(List<Song> l) {
+  Future<List<String>> filteralbums(List<Song> l) async {
     List<String> ret = new List();
     for (int i = 0; i < l.length; i++) {
       int j;

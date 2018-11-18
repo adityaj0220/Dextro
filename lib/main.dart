@@ -1,10 +1,8 @@
-import 'package:Dextro/albumcontent.dart';
+import'package:Dextro/albumcontent.dart';
 import 'package:Dextro/artistcontent.dart';
 import 'package:Dextro/homepage.dart';
-import 'package:flute_music_player/flute_music_player.dart';
 import 'songinfo.dart';
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(MyApp());
 

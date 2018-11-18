@@ -15,11 +15,11 @@ class ThirdTabState extends State<ThirdTab> {
   void setartistsongs() async {
     audioPlayer = new MusicFinder();
     artistsongs = await MusicFinder.allSongs();
-    artistList = filterartists(artistsongs);
+    artistList = await filterartists(artistsongs);
     setState(() {});
   }
 
-  List<String> filterartists(List<Song> l) {
+  Future<List<String>> filterartists(List<Song> l) async {
     List<String> ret = new List();
     for (int i = 0; i < l.length; i++) {
       int j;
