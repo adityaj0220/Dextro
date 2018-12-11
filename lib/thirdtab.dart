@@ -8,14 +8,10 @@ class ThirdTab extends StatefulWidget {
 }
 
 class ThirdTabState extends State<ThirdTab> {
-  List<Song> artistsongs;
-  MusicFinder audioPlayer;
   List<String> artistList;
 
   void setartistsongs() async {
-    audioPlayer = new MusicFinder();
-    artistsongs = await MusicFinder.allSongs();
-    artistList = await filterartists(artistsongs);
+    artistList = await filterartists(songs);
     setState(() {});
   }
 
@@ -51,54 +47,6 @@ class ThirdTabState extends State<ThirdTab> {
           );
         },
       ),
-      bottomNavigationBar: isStopped
-          ? null
-          : new BottomAppBar(
-        color: Colors.indigoAccent,
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  new IconButton(
-                      icon: new Icon(Icons.keyboard_arrow_up),
-                      color: Colors.white,
-                      onPressed: () {
-                        try {
-                          Navigator.of(context).pushNamed('/MusicLayout');
-                        } catch (e) {
-                          print(e.toString());
-                        }
-                      } //OnPressed
-                      ),
-                  (!isPlaying)
-                      ? (isPaused
-                          ? new Text(currentPlaylist[indexbackup].title,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 16.0))
-                          : new Text(''))
-                      : new Text(
-                          currentPlaylist[indexbackup].title,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 16.0),
-                        ),
-                  new IconButton(
-                    icon: (isPlaying)
-                        ? Icon(Icons.pause)
-                        : Icon(Icons.play_arrow),
-                    color: Colors.white,
-                    onPressed: () {
-                      if (isPlaying) {
-                        pause();
-                        setState(() {});
-                      } else if (!isPlaying) {
-                        play(songs[indexbackup].uri);
-                        setState(() {});
-                      }
-                    },
-                  )
-                ],
-              ),
-            ),
-    );
+      );
   }
 }

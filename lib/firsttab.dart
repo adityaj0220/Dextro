@@ -5,6 +5,10 @@ import 'dart:math';
 import 'package:Dextro/data.dart';
 
 class FirstTab extends StatefulWidget {
+
+  VoidCallback parentStateSet;
+  FirstTab(this.parentStateSet);
+
   @override
   FirstTabState createState() => new FirstTabState();
 }
@@ -38,7 +42,6 @@ class FirstTabState extends State<FirstTab> {
   }
 
   void setsongs() async {
-    audioPlayer = new MusicFinder();
     songs = await MusicFinder.allSongs();
     setState(() {});
   }
@@ -63,12 +66,13 @@ class FirstTabState extends State<FirstTab> {
                     )
                   : new CircleAvatar(backgroundImage: new FileImage(art)),
               title: new Text(song.title),
-              subtitle: (song.artist == '<unknown>')
-                  ? new Text('Unknown')
-                  : new Text(song.artist),
               onTap: () {
-                playSong(song, index);
+                if (indexbackup == null)
+                  indexbackup = index;
+                playSong(song, indexbackup);
                 currentPlaylist = songs;
+                isStopped = false;
+                widget.parentStateSet();
               } //OnTap
               );
         },
@@ -85,60 +89,13 @@ class FirstTabState extends State<FirstTab> {
             playSong(currentSong, n);
           }
           setState(() {});
+          widget.parentStateSet();
         },
         child: new Icon(
           Icons.shuffle,
           color: Colors.black,
         ),
       ),
-      bottomNavigationBar: isStopped
-          ? null
-          : new BottomAppBar(
-              color: Colors.indigoAccent,
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  new IconButton(
-                      icon: new Icon(Icons.keyboard_arrow_up),
-                      color: Colors.white,
-                      onPressed: () {
-                        try {
-                          Navigator.of(context).pushNamed('/MusicLayout');
-                        } catch (e) {
-                          print(e.toString());
-                        }
-                      } //OnPressed
-                      ),
-                  (!isPlaying)
-                      ? (isPaused
-                          ? new Text(currentPlaylist[indexbackup].title,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 16.0))
-                          : new Text(''))
-                      : new Text(
-                          currentPlaylist[indexbackup].title,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 16.0),
-                        ),
-                  new IconButton(
-                    icon: (isPlaying)
-                        ? Icon(Icons.pause)
-                        : Icon(Icons.play_arrow),
-                    color: Colors.white,
-                    onPressed: () {
-                      if (isPlaying) {
-                        pause();
-                        setState(() {});
-                      } else if (!isPlaying) {
-                        playSong(currentSong, indexbackup);
-                        setState(() {});
-                      }
-                    },
-                  )
-                ],
-              ),
-            ),
-    );
+       );
   }
 }

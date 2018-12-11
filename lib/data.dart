@@ -1,6 +1,7 @@
 import 'package:flute_music_player/flute_music_player.dart';
+import 'dart:async';
 
-MusicFinder audioPlayer;
+MusicFinder audioPlayer = new MusicFinder();
 List<Song> songs;
 List<Song> currentPlaylist;
 var isPlaying = false;
@@ -13,8 +14,8 @@ Song nextSong;
 String album;
 String artist;
 
-Future play(String url) async {
-  audioPlayer.play(url, isLocal: true);
+Future play(String uri) async {
+  audioPlayer.play(uri, isLocal: true);
   isPlaying = true;
   isStopped = false;
 }

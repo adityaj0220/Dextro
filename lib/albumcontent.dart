@@ -18,8 +18,6 @@ class AlbumSongState extends State<AlbumSong> {
   }
 
   void setsongs() async {
-    audioPlayer = new MusicFinder();
-    songs = await MusicFinder.allSongs();
     songs = await showsongsofalbum(songs);
     setState(() {});
   }
@@ -34,7 +32,7 @@ class AlbumSongState extends State<AlbumSong> {
 
   void playSong(Song song, int index) {
     currentSong = song;
-    currentPlaylist=songs;
+    currentPlaylist = songs;
     if (!isPlaying) {
       if (isPaused) {
         stop();
@@ -70,11 +68,11 @@ class AlbumSongState extends State<AlbumSong> {
             return new ListTile(
               leading: (art == null)
                   ? new CircleAvatar(
-                child: new Icon(Icons.music_note, color: Colors.white),
-                backgroundColor: HSLColor.fromAHSL(
-                    1.0, Random().nextDouble() * 360, 0.75, 0.3)
-                    .toColor(),
-              )
+                      child: new Icon(Icons.music_note, color: Colors.white),
+                      backgroundColor: HSLColor.fromAHSL(
+                              1.0, Random().nextDouble() * 360, 0.75, 0.3)
+                          .toColor(),
+                    )
                   : new CircleAvatar(backgroundImage: new FileImage(art)),
               title: new Text(songs[index].title),
               subtitle: new Text(songs[index].artist),
@@ -123,7 +121,7 @@ class AlbumSongState extends State<AlbumSong> {
                         pause();
                         setState(() {});
                       } else if (!isPlaying) {
-                        playSong(currentSong, indexbackup);
+                        play(currentPlaylist[indexbackup].uri);
                         setState(() {});
                       }
                     },

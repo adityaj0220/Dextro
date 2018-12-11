@@ -12,8 +12,6 @@ class SecondTabState extends State<SecondTab> {
   List<String> albumList;
 
   void setalbumsongs() async {
-    audioPlayer = new MusicFinder();
-    songs = await MusicFinder.allSongs();
     albumList = await filteralbums(songs);
     setState(() {});
   }
@@ -35,8 +33,7 @@ class SecondTabState extends State<SecondTab> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: new ListView.builder(
+    return new ListView.builder(
           itemCount: (albumList == null) ? 0 : albumList.length,
           itemBuilder: (context, int index) {
             return new ListTile(
@@ -46,55 +43,6 @@ class SecondTabState extends State<SecondTab> {
                 Navigator.of(context).pushNamed('/AlbumSong');
               },
             );
-          }),
-      bottomNavigationBar: isStopped
-          ? null
-          : new BottomAppBar(
-        color: Colors.indigoAccent,
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  new IconButton(
-                      icon: new Icon(Icons.keyboard_arrow_up),
-                      color: Colors.white,
-                      onPressed: () {
-                        try {
-                          Navigator.of(context).pushNamed('/MusicLayout');
-                        } catch (e) {
-                          print(e.toString());
-                        }
-                      } //OnPressed
-                      ),
-                  (!isPlaying)
-                      ? (isPaused
-                          ? new Text(currentPlaylist[indexbackup].title,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 16.0))
-                          : new Text(''))
-                      : new Text(
-                          currentPlaylist[indexbackup].title,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 16.0),
-                        ),
-                  new IconButton(
-                    icon: (isPlaying)
-                        ? Icon(Icons.pause)
-                        : Icon(Icons.play_arrow),
-                    color: Colors.white,
-                    onPressed: () {
-                      if (isPlaying) {
-                        pause();
-                        setState(() {});
-                      } else if (!isPlaying) {
-                        play(currentPlaylist[indexbackup].uri);
-                        setState(() {});
-                      }
-                    },
-                  )
-                ],
-              ),
-            ),
-    );
+          });
   }
 }
